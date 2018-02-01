@@ -64,10 +64,18 @@ def today_menu(weekday):
 def translate(header, menu, language):
     translator = Translator()
     indentations = [len(s) - len(s.lstrip("\t")) for s in menu]
-    translated_header, translated_menu = translator.treanslate([header, menu], src="da", dest=language)
+    translated_header, translated_menu = translator.translate([header, menu], src="da", dest=language)
     header = translated_header.text
     menu = ["\t" * x[0] + x[1].text for x in zip(indentations, translated_menu)]
     return header, menu
+
+
+def allergies_to_emoji(menu_items):
+    def do_replace(text):
+        return text.replace(u"(L)", u"🥛")  \
+                   .replace(u"(G)", u"🍞")  \
+                   .replace(u"(N)", u"🥜")
+    return [do_replace(t) for t in menu_items]
 
 
 def bot_menu(bot, update):
@@ -91,7 +99,7 @@ def bot_menu(bot, update):
         except ValueError:
             bot.send_message(chat_id=update.message.chat_id, text=u"Ukendt sprog. Brug ISO639-1 landekode")
             return
-    bot.send_message(chat_id=update.message.chat_id, text=u"{}:\t\n{}".format(header, "\t\n".join(menu)))
+    bot.send_message(chat_id=update.message.chat_id, text=u"{}:\t\n{}".format(header, "\t\n".join(allergies_to_emoji(menu))))
 
 
 def error_handler(bot, update, telegram_error):
