@@ -81,7 +81,7 @@ def allergies_to_emoji(menu_items):
 def bot_menu(bot, update):
     arguments = update.message.text.split(" ")
     if len(arguments) > 2:
-        bot.send_message(chat_id=update.message.chat_id, text=u"Invalid kommando")
+        bot.send_message(chat_id=update.message.chat_id, text=u"Ugyldig kommando")
         return
     translate_to = None
     if len(arguments) > 1:
